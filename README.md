@@ -15,7 +15,7 @@ A web application for managing library resources, users, and book lending.
 - ASP.NET Core / .NET
 - Entity Framework Core
 - SQL Server
-- HTML, CSS, JavaScript
+- HTML, Bootstrap
 
 ## Getting Started
 
