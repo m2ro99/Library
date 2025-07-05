@@ -1,0 +1,34 @@
+@model BooksModel
+@{
+    ViewData["Title"] = @Model.BookName + " Details";
+}
+
+
+<div class="card mb-3 mx-auto border-0" style="max-width: 1240px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="@Model.ImageUrl" class="img-fluid rounded-start" alt="@Model.ImageUrl cover">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title fs-1">@Model.BookName</h5>
+                <p class="card-text fs-4">Author: @Model.Author</p>
+                @if (Model.Count > 0)
+                {
+                    <p class="badge text-bg-success fs-6">Available Copies: @Model.Count</p>
+                    <form asp-controller="Borrow" asp-action="Borrow" method="post">
+                        <input type="hidden" name="bookId" value="@Model.BookId" />
+                        <button type="submit" class="btn btn-success fw-bold  fs-5">Borrow</button>
+                    </form>
+                }
+                else
+                {
+                    <div class="d-flex flex-column align-items-start">
+                        <p class="badge text-bg-danger fs-6">Available Copies: @Model.Count</p>
+                        <button disabled class="btn btn-outline-danger fw-bold fs-5">No Stock Available</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

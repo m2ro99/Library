@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<BooksModel>
+<h1 class="text-center m-5">Books List</h1>
+<div class="d-flex align-items-center justify-content-center gap-5 flex-wrap">
+    @foreach (var data in Model)
+    {
+        <div class="card" style="width: 20rem; min-height: 30rem;">
+            @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <img src="@data.ImageUrl" style="height: 20rem;" class="card-img-top" alt="@data.BookName cover">
+                <div class="position-absolute top-0 end-0 p-2">
+                    <a asp-controller="Modify" asp-action="Edit" asp-route-id="@data.BookId" class="btn btn-warning"><i
+                            class="bi bi-pencil-square"></i></a>
+                    <a asp-controller="Modify" asp-action="Delete" asp-route-id="@data.BookId" class="btn btn-danger"><i
+                            class="bi bi-trash"></i></a>
+                </div>
+            }
+            else
+            {
+                <img src="@data.ImageUrl" style="height: 20rem;" class="card-img-top" alt="@data.BookName cover">
+            }
+            <div class="card-body">
+                @if (data.Count > 0)
+                {
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            @if (data.BookName?.Length > 20)
+                            {
+                                <h5 class="card-title fs-4 fw-bold" title="@data.BookName">@data.BookName.Substring(0, 15)..</h5>
+                            }
+                            else
+                            {
+                                <h5 class="card-title  fs-4 fw-bold">@data.BookName</h5>
+                            }
+                            <p class="card-text">@data.Author</p>
+                        </div>
+                        <p class="badge text-bg-success" style="height: fit-content;">Only @data.Count Left</p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between gap-1">
+                        <form class="w-75" asp-controller="Borrow" asp-action="BorrowWithRedirect" method="get">
+                            <input type="hidden" name="bookId" value="@data.BookId" />
+                            <button type="submit" class="btn btn-success fw-bold w-100 fs-5">Borrow</button>
+                        </form>
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@data.BookId" class="btn"><i
+                                class="bi bi-info-lg fs-5"></i></a>
+                    </div>
+
+                }
+                else
+                {
+                    <div class="d-flex justify-content-between mb-3">
+                        <div>
+                            <h5 class="card-title fs-4 fw-bold">@data.BookName</h5>
+                            <p class="card-text">@data.Author</p>
+                        </div>
+                        <p class="badge text-bg-danger" style="height: fit-content;">@data.Count Left</p>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+
+                        <button disabled class="btn btn-outline-danger w-75 fs-5 fw-semibold">No Stock Available</button>
+                        <a class="btn" asp-controller="Home" asp-action="Details" asp-route-id="@data.BookId"><i
+                                class="bi bi-info-lg fs-5"></i></a>
+                    </div>
+
+                }
+            </div>
+        </div>
+    }
+</div>
+@if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+
+    <a asp-area="" asp-controller="Home" asp-action="Create" class="position-fixed btn bg-success "
+        style="right: 30px;z-index: 999;border-radius:50%;bottom: 30px;"><i class="bi bi-plus text-black"
+            style="font-size: 2rem;"></i></a>
+}

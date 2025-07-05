@@ -1,0 +1,8 @@
+.config
+.vs
+bin
+LibraryWebApp.sln.bak
+LibraryWebApp.csproj.user
+*.txt
+Migrations
+obj

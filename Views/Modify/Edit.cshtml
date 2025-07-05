@@ -1,0 +1,69 @@
+@model LibraryWebApp.Models.BooksModel
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h2>Edit Book</h2>
+<form asp-action="Edit" asp-controller="Modify" method="post" enctype="multipart/form-data" id="editForm">
+    <input type="hidden" asp-for="BookId" />
+    <div class="form-group">
+        <label asp-for="BookName"></label>
+        <input asp-for="BookName" class="form-control" />
+        <span asp-validation-for="BookName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Author"></label>
+        <input asp-for="Author" class="form-control" />
+        <span asp-validation-for="Author" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Count"></label>
+        <input asp-for="Count" class="form-control" />
+        <span asp-validation-for="Count" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Current Image</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="Book Image" style="max-width:150px;max-height:150px;" />
+        }
+        else
+        {
+            <span class="text-muted">No image available.</span>
+        }
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageFile">Change Image (optional)</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary" id="saveBtn" disabled>Save</button>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('editForm');
+            const saveBtn = document.getElementById('saveBtn');
+            const initial = {
+                BookName: form.BookName.value,
+                Author: form.Author.value,
+                Count: form.Count.value,
+                ImageFile: ''
+            };
+            form.addEventListener('input', function () {
+                const changed =
+                    form.BookName.value !== initial.BookName ||
+                    form.Author.value !== initial.Author ||
+                    form.Count.value !== initial.Count ||
+                    form.ImageFile.value !== initial.ImageFile;
+                saveBtn.disabled = !changed;
+            });
+            form.ImageFile.addEventListener('change', function () {
+                saveBtn.disabled = false;
+            });
+        });
+    </script>
+}

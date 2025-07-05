@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Borrowed Books";
+}
+@model List<BorrowedBooksModel>
+
+
+@if (Model.Count == 0)
+{
+    <p>You haven't borrowed any books.</p>
+}
+else
+{
+    <h1 class="text-center my-5">Borrowed Books</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Author</th>
+                <th>Borrow Date</th>
+                <th>Return Date</th>
+                <th>Return</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>@b.Book!.BookName</td>
+                    <td>@b.Book.Author</td>
+                    <td>@b.BorrowDate.ToShortDateString()</td>
+
+                    @if (b.ReturnDate != null)
+                    {
+                        <td>
+                            @b.ReturnDate?.ToShortDateString()
+                        </td>
+                    }
+                    else
+                    {
+                        <td>14 Days</td>
+                    }
+
+                    <td>
+                        <form asp-action="ReturnBook" asp-controller="Borrow" method="post">
+                            <input type="hidden" name="id" value="@b.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-warning">Return</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
